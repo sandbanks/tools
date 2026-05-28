@@ -7,6 +7,8 @@ mod uuid_gen;
 mod jwt_decoder;
 mod mermaid_editor;
 mod timestamp_conv;
+mod json_to_go;
+mod json_to_rust;
 
 use app::App;
 

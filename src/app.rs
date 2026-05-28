@@ -11,6 +11,8 @@ use crate::uuid_gen::UuidGen;
 use crate::jwt_decoder::JwtDecoder;
 use crate::mermaid_editor::MermaidEditor;
 use crate::timestamp_conv::TimestampConv;
+use crate::json_to_go::JsonToGo;
+use crate::json_to_rust::JsonToRust;
 
 // Helper to set the HTML dark/light class
 fn set_theme_class(dark: bool) {
@@ -234,6 +236,26 @@ pub fn App() -> impl IntoView {
                                         </svg>
                                         <span class="font-medium text-xs">"Timestamp Converter"</span>
                                     </A>
+                                    <A 
+                                        href="json-to-go" 
+                                        on:click=move |_| set_mobile_menu_open.set(false)
+                                        attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
+                                    >
+                                        <svg class="w-4 h-4 opacity-75" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
+                                        </svg>
+                                        <span class="font-medium text-xs">"JSON to Go"</span>
+                                    </A>
+                                    <A 
+                                        href="json-to-rust" 
+                                        on:click=move |_| set_mobile_menu_open.set(false)
+                                        attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
+                                    >
+                                        <svg class="w-4 h-4 opacity-75" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
+                                        </svg>
+                                        <span class="font-medium text-xs">"JSON to Rust"</span>
+                                    </A>
                                 </div>
                             </div>
                         </nav>
@@ -288,6 +310,8 @@ pub fn App() -> impl IntoView {
                             <Route path=path!("jwt") view=JwtDecoder />
                             <Route path=path!("mermaid") view=MermaidEditor />
                             <Route path=path!("timestamp") view=TimestampConv />
+                            <Route path=path!("json-to-go") view=JsonToGo />
+                            <Route path=path!("json-to-rust") view=JsonToRust />
                         </Routes>
                     </div>
                 </main>

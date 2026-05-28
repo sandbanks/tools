@@ -73,6 +73,22 @@ pub fn Dashboard() -> impl IntoView {
             icon_d: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z",
             is_active: true,
         },
+        Tool {
+            name: "JSON to Go Struct",
+            desc: "Convert JSON objects into fully typed, nested Go structs instantly.",
+            path: "json-to-go",
+            category: "Generators",
+            icon_d: "M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5",
+            is_active: true,
+        },
+        Tool {
+            name: "JSON to Rust Struct",
+            desc: "Convert JSON objects into fully typed, nested Rust struct definitions.",
+            path: "json-to-rust",
+            category: "Generators",
+            icon_d: "M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5",
+            is_active: true,
+        },
     ];
 
     // Filter tools based on query
