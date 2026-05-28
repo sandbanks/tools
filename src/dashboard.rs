@@ -215,11 +215,15 @@ pub fn Dashboard() -> impl IntoView {
                                         </h2>
                                     </div>
                                     <span class=format!("inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border {}", cat_badge_class)>
-                                        {category_tools.len().to_string()} " tools"
+                                        {format!(
+                                            "{} {}",
+                                            category_tools.len(),
+                                            if category_tools.len() == 1 { "tool" } else { "tools" }
+                                        )}
                                     </span>
                                 </div>
                                 
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                     {category_tools.into_iter().map(move |tool| {
                                         let is_active = tool.is_active;
                                         let path = tool.path;
