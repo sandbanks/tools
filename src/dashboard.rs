@@ -154,13 +154,48 @@ pub fn Dashboard() -> impl IntoView {
                     categories.into_iter().map(move |category| {
                         let category_tools: Vec<&Tool> = tools_list.iter().filter(|t| t.category == category).collect();
                         
+                        let (cat_icon, cat_badge_class) = match category {
+                            "Encoders & Decoders" => (
+                                view! {
+                                    <svg class="w-4.5 h-4.5 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                                    </svg>
+                                }.into_any(),
+                                "bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-400 border-indigo-200/50 dark:border-indigo-800/40"
+                            ),
+                            "Formatters & Beautifiers" => (
+                                view! {
+                                    <svg class="w-4.5 h-4.5 text-violet-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                                    </svg>
+                                }.into_any(),
+                                "bg-violet-50 dark:bg-violet-950/40 text-violet-700 dark:text-violet-400 border-violet-200/50 dark:border-violet-800/40"
+                            ),
+                            _ => (
+                                view! {
+                                    <svg class="w-4.5 h-4.5 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 21l8.982-11.795m-9 0L14 3L5.018 14.805" />
+                                    </svg>
+                                }.into_any(),
+                                "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border-emerald-200/50 dark:border-emerald-800/40"
+                            ),
+                        };
+
                         view! {
-                            <div class="space-y-4">
-                                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 px-1">
-                                    {category}
-                                </h2>
+                            <section class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 shadow-xs space-y-5">
+                                <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800/60 pb-3">
+                                    <div class="flex items-center space-x-2.5">
+                                        {cat_icon}
+                                        <h2 class="text-sm font-bold tracking-wide text-slate-800 dark:text-slate-200 uppercase">
+                                            {category}
+                                        </h2>
+                                    </div>
+                                    <span class=format!("inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border {}", cat_badge_class)>
+                                        {category_tools.len().to_string()} " tools"
+                                    </span>
+                                </div>
                                 
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                     {category_tools.into_iter().map(move |tool| {
                                         let is_active = tool.is_active;
                                         let path = tool.path;
@@ -168,27 +203,27 @@ pub fn Dashboard() -> impl IntoView {
                                         let card_content = view! {
                                             <div class=move || {
                                                 format!(
-                                                    "group relative flex items-start space-x-4 p-5 rounded-xl border transition-all duration-200 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800/80 shadow-xs h-full {}",
+                                                    "group relative flex items-start space-x-4 p-4 rounded-xl border transition-all duration-200 bg-slate-50 dark:bg-slate-950/40 border-slate-200/50 dark:border-slate-800/40 shadow-xs h-full {}",
                                                     if is_active {
-                                                        "hover:scale-[1.01] hover:border-indigo-500/50 hover:shadow-lg hover:shadow-indigo-500/5 dark:hover:bg-slate-850 cursor-pointer"
+                                                        "hover:scale-[1.01] hover:border-indigo-500/50 hover:bg-white dark:hover:bg-slate-900 hover:shadow-md hover:shadow-indigo-500/5 cursor-pointer"
                                                     } else {
-                                                        "opacity-70 dark:opacity-60 cursor-not-allowed select-none"
+                                                        "opacity-60 cursor-not-allowed select-none"
                                                     }
                                                 )
                                             }>
                                                 // Icon Wrapper
-                                                <div class="flex-shrink-0 p-2.5 rounded-lg bg-indigo-50 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 group-hover:scale-105 transition-transform duration-200">
-                                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <div class="flex-shrink-0 p-2.5 rounded-lg bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 group-hover:scale-105 border border-slate-200/40 dark:border-slate-800/40 transition-transform duration-200">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" d=tool.icon_d />
                                                     </svg>
                                                 </div>
 
                                                 // Info
                                                 <div class="flex-1 space-y-1 pr-6">
-                                                    <h3 class="font-bold text-base text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                                                    <h3 class="font-bold text-sm text-slate-850 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                                                         {tool.name}
                                                     </h3>
-                                                    <p class="text-sm text-slate-500 dark:text-slate-400 leading-normal">
+                                                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                                                         {tool.desc}
                                                     </p>
                                                 </div>
@@ -196,17 +231,13 @@ pub fn Dashboard() -> impl IntoView {
                                                 // Badges
                                                 <div class="absolute top-4 right-4">
                                                     {if is_active {
-                                                        view! {
-                                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/40">
-                                                                "Active"
-                                                            </span>
-                                                        }.into_any()
+                                                        None
                                                     } else {
-                                                        view! {
-                                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700/50">
+                                                        Some(view! {
+                                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700/50">
                                                                 "Soon"
                                                             </span>
-                                                        }.into_any()
+                                                        }.into_any())
                                                     }}
                                                 </div>
                                             </div>
@@ -215,13 +246,13 @@ pub fn Dashboard() -> impl IntoView {
                                         view! {
                                             {if is_active {
                                                 view! {
-                                                    <A href=path attr:class="block no-underline">
+                                                    <A href=path attr:class="block no-underline h-full">
                                                         {card_content}
                                                     </A>
                                                 }.into_any()
                                             } else {
                                                 view! {
-                                                    <div class="block">
+                                                    <div class="block h-full">
                                                         {card_content}
                                                     </div>
                                                 }.into_any()
@@ -229,7 +260,7 @@ pub fn Dashboard() -> impl IntoView {
                                         }
                                     }).collect::<Vec<_>>()}
                                 </div>
-                            </div>
+                            </section>
                         }
                     }).collect::<Vec<_>>().into_any()
                 }

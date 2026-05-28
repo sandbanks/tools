@@ -113,97 +113,129 @@ pub fn App() -> impl IntoView {
                         format!("{} -translate-x-full", base_classes)
                     }
                 }>
-                    <div>
-                        // Logo
-                        <div class="hidden md:flex items-center space-x-3 px-3 mb-8">
-                            <svg class="w-7 h-7 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            <span class="font-bold text-xl tracking-tight bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent">"DevTools"</span>
-                        </div>
+                    // Logo
+                    <div class="hidden md:flex items-center space-x-3 px-3 mb-8 flex-shrink-0">
+                        <svg class="w-7 h-7 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span class="font-bold text-xl tracking-tight bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent">"DevTools"</span>
+                    </div>
 
-                        // Navigation Links
-                        <nav class="space-y-1.5">
-                            <A 
-                                href="" 
-                                on:click=move |_| set_mobile_menu_open.set(false)
-                                attr:class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
-                            >
-                                <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                                </svg>
-                                <span class="font-medium text-sm">"Dashboard"</span>
-                            </A>
-                            <A 
-                                href="base64" 
-                                on:click=move |_| set_mobile_menu_open.set(false)
-                                attr:class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
-                            >
-                                <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                                </svg>
-                                <span class="font-medium text-sm">"Base64 Codec"</span>
-                            </A>
-                            <A 
-                                href="json" 
-                                on:click=move |_| set_mobile_menu_open.set(false)
-                                attr:class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
-                            >
-                                <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                                </svg>
-                                <span class="font-medium text-sm">"JSON Formatter"</span>
-                            </A>
-                            <A 
-                                href="url" 
-                                on:click=move |_| set_mobile_menu_open.set(false)
-                                attr:class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
-                            >
-                                <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                                </svg>
-                                <span class="font-medium text-sm">"URL Codec"</span>
-                            </A>
-                            <A 
-                                href="uuid" 
-                                on:click=move |_| set_mobile_menu_open.set(false)
-                                attr:class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
-                            >
-                                <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                                <span class="font-medium text-sm">"UUID Generator"</span>
-                            </A>
-                            <A 
-                                href="jwt" 
-                                on:click=move |_| set_mobile_menu_open.set(false)
-                                attr:class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
-                            >
-                                <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                </svg>
-                                <span class="font-medium text-sm">"JWT Decoder"</span>
-                            </A>
-                            <A 
-                                href="mermaid" 
-                                on:click=move |_| set_mobile_menu_open.set(false)
-                                attr:class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
-                            >
-                                <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                                </svg>
-                                <span class="font-medium text-sm">"Mermaid Diagrams"</span>
-                            </A>
-                            <A 
-                                href="timestamp" 
-                                on:click=move |_| set_mobile_menu_open.set(false)
-                                attr:class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
-                            >
-                                <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <span class="font-medium text-sm">"Timestamp Converter"</span>
-                            </A>
+                    // Navigation Scroll Container
+                    <div class="flex-1 overflow-y-auto custom-scrollbar pr-1 -mr-2 my-2">
+                        <nav class="space-y-4">
+                            <div>
+                                <A 
+                                    href="" 
+                                    on:click=move |_| set_mobile_menu_open.set(false)
+                                    attr:class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
+                                >
+                                    <svg class="w-4.5 h-4.5 opacity-80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                    </svg>
+                                    <span class="font-semibold text-sm">"Dashboard"</span>
+                                </A>
+                            </div>
+
+                            // Category: Encoders & Decoders
+                            <div class="space-y-1">
+                                <div class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 flex items-center justify-between">
+                                    <span>"Encoders & Decoders"</span>
+                                    <span class="w-1 h-1 rounded-full bg-indigo-500/60"></span>
+                                </div>
+                                <div class="space-y-0.5">
+                                    <A 
+                                        href="base64" 
+                                        on:click=move |_| set_mobile_menu_open.set(false)
+                                        attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
+                                    >
+                                        <svg class="w-4 h-4 opacity-75" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                                        </svg>
+                                        <span class="font-medium text-xs">"Base64 Codec"</span>
+                                    </A>
+                                    <A 
+                                        href="url" 
+                                        on:click=move |_| set_mobile_menu_open.set(false)
+                                        attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
+                                    >
+                                        <svg class="w-4 h-4 opacity-75" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                        </svg>
+                                        <span class="font-medium text-xs">"URL Codec"</span>
+                                    </A>
+                                    <A 
+                                        href="jwt" 
+                                        on:click=move |_| set_mobile_menu_open.set(false)
+                                        attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
+                                    >
+                                        <svg class="w-4 h-4 opacity-75" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                        </svg>
+                                        <span class="font-medium text-xs">"JWT Decoder"</span>
+                                    </A>
+                                </div>
+                            </div>
+
+                            // Category: Formatters & Beautifiers
+                            <div class="space-y-1">
+                                <div class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 flex items-center justify-between">
+                                    <span>"Formatters & Beautifiers"</span>
+                                    <span class="w-1 h-1 rounded-full bg-violet-500/60"></span>
+                                </div>
+                                <div class="space-y-0.5">
+                                    <A 
+                                        href="json" 
+                                        on:click=move |_| set_mobile_menu_open.set(false)
+                                        attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
+                                    >
+                                        <svg class="w-4 h-4 opacity-75" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                                        </svg>
+                                        <span class="font-medium text-xs">"JSON Formatter"</span>
+                                    </A>
+                                </div>
+                            </div>
+
+                            // Category: Generators
+                            <div class="space-y-1">
+                                <div class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 flex items-center justify-between">
+                                    <span>"Generators"</span>
+                                    <span class="w-1 h-1 rounded-full bg-emerald-500/60"></span>
+                                </div>
+                                <div class="space-y-0.5">
+                                    <A 
+                                        href="uuid" 
+                                        on:click=move |_| set_mobile_menu_open.set(false)
+                                        attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
+                                    >
+                                        <svg class="w-4 h-4 opacity-75" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        <span class="font-medium text-xs">"UUID Generator"</span>
+                                    </A>
+                                    <A 
+                                        href="mermaid" 
+                                        on:click=move |_| set_mobile_menu_open.set(false)
+                                        attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
+                                    >
+                                        <svg class="w-4 h-4 opacity-75" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                        </svg>
+                                        <span class="font-medium text-xs">"Mermaid Diagrams"</span>
+                                    </A>
+                                    <A 
+                                        href="timestamp" 
+                                        on:click=move |_| set_mobile_menu_open.set(false)
+                                        attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
+                                    >
+                                        <svg class="w-4 h-4 opacity-75" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span class="font-medium text-xs">"Timestamp Converter"</span>
+                                    </A>
+                                </div>
+                            </div>
                         </nav>
                     </div>
 
