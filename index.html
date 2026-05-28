@@ -42,6 +42,51 @@
                 return { success: false, error: err.toString() };
             }
         };
+
+        window.downloadQrCode = function(svgId, filename, format) {
+            const svgEl = document.getElementById(svgId);
+            if (!svgEl) return;
+            
+            const serializer = new XMLSerializer();
+            const svgString = serializer.serializeToString(svgEl);
+            
+            if (format === 'svg') {
+                const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename + '.svg';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            } else if (format === 'png') {
+                const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+                const url = URL.createObjectURL(svgBlob);
+                
+                const image = new Image();
+                image.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 1000;
+                    canvas.height = 1000;
+                    const context = canvas.getContext('2d');
+                    context.drawImage(image, 0, 0, 1000, 1000);
+                    
+                    canvas.toBlob(function(blob) {
+                        const pngUrl = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = pngUrl;
+                        link.download = filename + '.png';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(pngUrl);
+                        URL.revokeObjectURL(url);
+                    }, 'image/png');
+                };
+                image.src = url;
+            }
+        };
     </script>
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans min-h-dvh antialiased transition-colors duration-300">

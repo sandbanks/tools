@@ -13,6 +13,7 @@ use crate::mermaid_editor::MermaidEditor;
 use crate::timestamp_conv::TimestampConv;
 use crate::json_to_go::JsonToGo;
 use crate::json_to_rust::JsonToRust;
+use crate::qr_generator::QrGenerator;
 
 // Helper to set the HTML dark/light class
 fn set_theme_class(dark: bool) {
@@ -298,6 +299,16 @@ pub fn App() -> impl IntoView {
                                         </svg>
                                         <span class="font-medium text-xs">"JSON to Rust"</span>
                                     </A>
+                                    <A 
+                                        href="qr-generator" 
+                                        on:click=move |_| set_mobile_menu_open.set(false)
+                                        attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
+                                    >
+                                        <svg class="w-4 h-4 opacity-75" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0113.5 9.375v-4.5zM15 21a3 3 0 100-6 3 3 0 000 6zM21 15a3 3 0 11-6 0 3 3 0 016 0zM21 21a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        <span class="font-medium text-xs">"QR Generator"</span>
+                                    </A>
                                 </div>
                             </div>
                         </nav>
@@ -328,6 +339,7 @@ pub fn App() -> impl IntoView {
                             <Route path=path!("timestamp") view=TimestampConv />
                             <Route path=path!("json-to-go") view=JsonToGo />
                             <Route path=path!("json-to-rust") view=JsonToRust />
+                            <Route path=path!("qr-generator") view=QrGenerator />
                         </Routes>
                     </div>
                 </main>

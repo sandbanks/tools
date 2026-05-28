@@ -9,6 +9,7 @@ mod mermaid_editor;
 mod timestamp_conv;
 mod json_to_go;
 mod json_to_rust;
+mod qr_generator;
 
 use app::App;
 

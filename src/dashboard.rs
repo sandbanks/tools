@@ -89,6 +89,14 @@ pub fn Dashboard() -> impl IntoView {
             icon_d: "M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5",
             is_active: true,
         },
+        Tool {
+            name: "QR Code Generator",
+            desc: "Generate customized QR codes with colors, gradients, logos, and custom eyes.",
+            path: "qr-generator",
+            category: "Generators",
+            icon_d: "M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0113.5 9.375v-4.5zM15 21a3 3 0 100-6 3 3 0 000 6zM21 15a3 3 0 11-6 0 3 3 0 016 0zM21 21a3 3 0 11-6 0 3 3 0 016 0z",
+            is_active: true,
+        },
     ];
 
     // Filter tools based on query

@@ -8,6 +8,7 @@ leptos = { version = "0.8", features = ["csr"] }
 leptos_router = { version = "0.8" }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+qrcodegen = "1.8"
 base64 = "0.22"
 getrandom = { version = "0.2", features = ["js"] }
 uuid = { version = "1.10", features = ["v4", "v7", "js"] }
@@ -27,7 +28,11 @@ features = [
   "HtmlElement",
   "HtmlTextAreaElement",
   "HtmlSelectElement",
-  "MediaQueryList"
+  "MediaQueryList",
+  "HtmlInputElement",
+  "FileReader",
+  "File",
+  "FileList"
 ]
 
 [profile.release]
