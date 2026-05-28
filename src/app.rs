@@ -72,11 +72,32 @@ pub fn App() -> impl IntoView {
                 
                 // Mobile Top Bar
                 <header class="md:hidden flex items-center justify-between px-6 py-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 z-30">
-                    <div class="flex items-center space-x-3">
-                        <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        <span class="font-bold text-lg tracking-tight bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent">"DevTools"</span>
+                    <div class="flex items-center space-x-4">
+                        <A href="" attr:class="flex items-center space-x-2.5 no-underline">
+                            <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <span class="font-bold text-lg tracking-tight bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent">"DevTools"</span>
+                        </A>
+                        
+                        <button
+                            on:click=move |_| set_is_dark.update(|dark| *dark = !*dark)
+                            class="p-1.5 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                        >
+                            {move || if is_dark.get() {
+                                view! {
+                                    <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                                    </svg>
+                                }.into_any()
+                            } else {
+                                view! {
+                                    <svg class="w-3.5 h-3.5 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                                    </svg>
+                                }.into_any()
+                            }}
+                        </button>
                     </div>
                     
                     <button 
@@ -108,19 +129,40 @@ pub fn App() -> impl IntoView {
 
                 // Navigation Sidebar (Desktop + Mobile overlay Drawer)
                 <aside class=move || {
-                    let base_classes = "fixed md:sticky top-0 left-0 h-dvh w-72 md:w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 z-40 flex flex-col justify-between py-6 px-4 transition-transform duration-300 md:translate-x-0";
+                    let base_classes = "fixed md:sticky top-0 left-0 h-dvh w-72 md:w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 z-40 flex flex-col justify-start py-6 px-4 transition-transform duration-300 md:translate-x-0";
                     if mobile_menu_open.get() {
                         format!("{} translate-x-0", base_classes)
                     } else {
                         format!("{} -translate-x-full", base_classes)
                     }
                 }>
-                    // Logo
-                    <div class="hidden md:flex items-center space-x-3 px-3 mb-8 flex-shrink-0">
-                        <svg class="w-7 h-7 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        <span class="font-bold text-xl tracking-tight bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent">"DevTools"</span>
+                    // Logo & Theme Toggle
+                    <div class="hidden md:flex items-center justify-between px-3 mb-8 flex-shrink-0 w-full">
+                        <A href="" attr:class="flex items-center space-x-2.5 no-underline">
+                            <svg class="w-7 h-7 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <span class="font-bold text-xl tracking-tight bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent">"DevTools"</span>
+                        </A>
+                        
+                        <button
+                            on:click=move |_| set_is_dark.update(|dark| *dark = !*dark)
+                            class="p-1.5 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                        >
+                            {move || if is_dark.get() {
+                                view! {
+                                    <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                                    </svg>
+                                }.into_any()
+                            } else {
+                                view! {
+                                    <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                                    </svg>
+                                }.into_any()
+                            }}
+                        </button>
                     </div>
 
                     // Navigation Scroll Container
@@ -261,32 +303,6 @@ pub fn App() -> impl IntoView {
                         </nav>
                     </div>
 
-                    // Sidebar Footer & Theme Toggle
-                    <div class="border-t border-slate-200 dark:border-slate-800 pt-4 px-2">
-                        <button
-                            on:click=move |_| set_is_dark.update(|dark| *dark = !*dark)
-                            class="flex items-center justify-between w-full px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-200"
-                        >
-                            <span class="text-sm font-medium">"Theme Mode"</span>
-                            <div class="p-1.5 rounded-md bg-slate-100 dark:bg-slate-800">
-                                {move || if is_dark.get() {
-                                    view! {
-                                        // Sun Icon for triggering light mode
-                                        <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
-                                        </svg>
-                                    }
-                                } else {
-                                    view! {
-                                        // Moon Icon for triggering dark mode
-                                        <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                                        </svg>
-                                    }
-                                }}
-                            </div>
-                        </button>
-                    </div>
                 </aside>
 
                 // Main Content View Area

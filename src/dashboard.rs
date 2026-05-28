@@ -124,7 +124,7 @@ pub fn Dashboard() -> impl IntoView {
                         "🚀 WebAssembly Toolbox"
                     </span>
                     <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">
-                        "Developer Utilities Dashboard"
+                        "DevTools Dashboard"
                     </h1>
                     <p class="text-indigo-100 text-sm md:text-base font-medium leading-relaxed">
                         "A collection of secure, browser-based, client-side tools running in high-performance WebAssembly. No data leaves your machine."
