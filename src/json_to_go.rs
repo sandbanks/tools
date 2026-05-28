@@ -136,8 +136,17 @@ pub fn JsonToGo() -> impl IntoView {
         output.push_str("// Auto-generated Go structs representing the JSON schema\n\n");
         for s in structs.iter().rev() {
             output.push_str(&format!("type {} struct {{\n", s.name));
+            let max_name_len = s.fields.iter().map(|f| f.name.len()).max().unwrap_or(0);
+            let max_type_len = s.fields.iter().map(|f| f.go_type.len()).max().unwrap_or(0);
             for f in &s.fields {
-                output.push_str(&format!("\t{} {:<15} {}\n", f.name, f.go_type, f.json_tag));
+                output.push_str(&format!(
+                    "\t{:<width_name$} {:<width_type$} {}\n",
+                    f.name,
+                    f.go_type,
+                    f.json_tag,
+                    width_name = max_name_len,
+                    width_type = max_type_len
+                ));
             }
             output.push_str("}\n\n");
         }
