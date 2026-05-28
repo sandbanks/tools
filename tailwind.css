@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@source "src/**/*.rs";
+
+@theme {
+  --font-sans: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* Scrollbar customization - adapt dynamically to light/dark themes */
+html,
+.custom-scrollbar {
+  --scrollbar-thumb: #cbd5e1; /* slate-300 for light mode */
+  --scrollbar-track: #f1f5f9; /* slate-100 for light mode */
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-width: thin;
+}
+
+:is(.dark) html,
+:is(.dark) .custom-scrollbar {
+  --scrollbar-thumb: #475569; /* slate-600 for dark mode */
+  --scrollbar-track: #0f172a; /* slate-900 for dark mode */
+}
+
+@supports not (scrollbar-color: auto) {
+  html::-webkit-scrollbar,
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  html::-webkit-scrollbar-thumb,
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 3px;
+  }
+  html::-webkit-scrollbar-track,
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+  }
+}
+
+/* Navigation active states */
+.nav-link[aria-current="page"] {
+  background-color: var(--color-slate-100);
+  color: var(--color-indigo-600);
+  font-weight: 600;
+  box-shadow: inset 2px 0 0 0 var(--color-indigo-600);
+}
+
+:is(.dark) .nav-link[aria-current="page"] {
+  background-color: var(--color-slate-800);
+  color: var(--color-indigo-400);
+  box-shadow: inset 2px 0 0 0 var(--color-indigo-500);
+}

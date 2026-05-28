@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer DevTools</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Trunk Tailwind Integration -->
+    <link data-trunk rel="tailwind-css" href="tailwind.css" />
+    
+    <!-- Mermaid.js Integration -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: 'neutral'
+        });
+        
+        window.renderMermaid = async function(id, code, isDark) {
+            try {
+                mermaid.initialize({
+                    startOnLoad: false,
+                    theme: isDark ? 'dark' : 'default',
+                    themeVariables: {
+                        background: isDark ? '#0f172a' : '#f8fafc',
+                        primaryColor: isDark ? '#1e1b4b' : '#e0e7ff',
+                        primaryTextColor: isDark ? '#f8fafc' : '#1e293b',
+                        lineColor: isDark ? '#334155' : '#cbd5e1',
+                    }
+                });
+                const { svg } = await mermaid.render(id, code);
+                return { success: true, svg: svg };
+            } catch (err) {
+                // Clean up bad nodes left by rendering failures
+                const badEl = document.getElementById(id);
+                if (badEl) badEl.remove();
+                return { success: false, error: err.toString() };
+            }
+        };
+    </script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-dvh antialiased transition-colors duration-300">
+    <!-- Leptos App Mount Point -->
+</body>
+</html>
