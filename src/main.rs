@@ -10,6 +10,9 @@ mod timestamp_conv;
 mod json_to_go;
 mod json_to_rust;
 mod qr_generator;
+mod sql_fmt;
+mod yaml_json;
+mod csv_json;
 
 use app::App;
 

@@ -69,7 +69,7 @@ pub fn Dashboard() -> impl IntoView {
             name: "Timestamp Converter",
             desc: "Convert Unix epoch timestamps to UTC, Local, and ISO dates and vice versa.",
             path: "timestamp",
-            category: "Generators",
+            category: "Converters",
             icon_d: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z",
             is_active: true,
         },
@@ -77,7 +77,7 @@ pub fn Dashboard() -> impl IntoView {
             name: "JSON to Go Struct",
             desc: "Convert JSON objects into fully typed, nested Go structs instantly.",
             path: "json-to-go",
-            category: "Generators",
+            category: "Converters",
             icon_d: "M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5",
             is_active: true,
         },
@@ -85,7 +85,7 @@ pub fn Dashboard() -> impl IntoView {
             name: "JSON to Rust Struct",
             desc: "Convert JSON objects into fully typed, nested Rust struct definitions.",
             path: "json-to-rust",
-            category: "Generators",
+            category: "Converters",
             icon_d: "M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5",
             is_active: true,
         },
@@ -95,6 +95,30 @@ pub fn Dashboard() -> impl IntoView {
             path: "qr-generator",
             category: "Generators",
             icon_d: "M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0113.5 9.375v-4.5zM15 21a3 3 0 100-6 3 3 0 000 6zM21 15a3 3 0 11-6 0 3 3 0 016 0zM21 21a3 3 0 11-6 0 3 3 0 016 0z",
+            is_active: true,
+        },
+        Tool {
+            name: "SQL Formatter",
+            desc: "Format and pretty-print raw SQL queries into clean, readable structures instantly.",
+            path: "sql-format",
+            category: "Formatters & Beautifiers",
+            icon_d: "M4 6h16M4 12h16M4 18h7",
+            is_active: true,
+        },
+        Tool {
+            name: "YAML ↔ JSON",
+            desc: "Convert configuration files between YAML syntax and JSON format seamlessly.",
+            path: "yaml-json",
+            category: "Converters",
+            icon_d: "M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5",
+            is_active: true,
+        },
+        Tool {
+            name: "CSV ↔ JSON",
+            desc: "Convert tabular data between CSV format and structured JSON arrays.",
+            path: "csv-json",
+            category: "Converters",
+            icon_d: "M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25A2.25 2.25 0 0113.5 8.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z",
             is_active: true,
         },
     ];
@@ -194,6 +218,14 @@ pub fn Dashboard() -> impl IntoView {
                                     </svg>
                                 }.into_any(),
                                 "bg-violet-50 dark:bg-violet-950/40 text-violet-700 dark:text-violet-400 border-violet-200/50 dark:border-violet-800/40"
+                            ),
+                            "Converters" => (
+                                view! {
+                                    <svg class="w-4.5 h-4.5 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                    </svg>
+                                }.into_any(),
+                                "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 border-blue-200/50 dark:border-blue-800/40"
                             ),
                             _ => (
                                 view! {
