@@ -1,7 +1,7 @@
 use leptos::prelude::*;
 use qrcodegen::{QrCode, QrCodeEcc};
-use web_sys::window;
 use wasm_bindgen::JsCast;
+use web_sys::window;
 
 #[component]
 pub fn QrGenerator() -> impl IntoView {
@@ -9,7 +9,7 @@ pub fn QrGenerator() -> impl IntoView {
     let (body_style, set_body_style) = signal("square".to_string());
     let (eye_frame_style, set_eye_frame_style) = signal("square".to_string());
     let (eye_ball_style, set_eye_ball_style) = signal("square".to_string());
-    
+
     // Colors
     let (bg_color, set_bg_color) = signal("#ffffff".to_string());
     let (fg_type, set_fg_type) = signal("solid".to_string());
@@ -18,10 +18,10 @@ pub fn QrGenerator() -> impl IntoView {
     let (grad_end, set_grad_end) = signal("#4f46e5".to_string());
     let (grad_type, set_grad_type) = signal("linear".to_string());
     let (grad_angle, set_grad_angle) = signal(45);
-    
+
     let (custom_eye_color, set_custom_eye_color) = signal(false);
     let (eye_color, set_eye_color) = signal("#1d4ed8".to_string()); // default custom eye color: blue-700
-    
+
     // Logo
     let (logo_type, set_logo_type) = signal("none".to_string());
     let (logo_preset, set_logo_preset) = signal("🦀".to_string());
@@ -48,16 +48,18 @@ pub fn QrGenerator() -> impl IntoView {
             if let Some(file) = files.get(0) {
                 let reader = web_sys::FileReader::new().unwrap();
                 let reader_c = reader.clone();
-                
-                let onload = wasm_bindgen::closure::Closure::wrap(Box::new(move |_e: web_sys::Event| {
-                    if let Ok(result) = reader_c.result() {
-                        if let Some(data_url) = result.as_string() {
-                            set_logo_upload.set(data_url);
-                            set_logo_type.set("upload".to_string());
+
+                let onload =
+                    wasm_bindgen::closure::Closure::wrap(Box::new(move |_e: web_sys::Event| {
+                        if let Ok(result) = reader_c.result() {
+                            if let Some(data_url) = result.as_string() {
+                                set_logo_upload.set(data_url);
+                                set_logo_type.set("upload".to_string());
+                            }
                         }
-                    }
-                }) as Box<dyn FnMut(web_sys::Event)>);
-                
+                    })
+                        as Box<dyn FnMut(web_sys::Event)>);
+
                 reader.set_onload(Some(onload.as_ref().unchecked_ref()));
                 let _ = reader.read_as_data_url(&file);
                 onload.forget();
@@ -68,7 +70,9 @@ pub fn QrGenerator() -> impl IntoView {
     let trigger_download = move |format: &'static str| {
         if let Some(win) = window() {
             // Retrieve JS function window.downloadQrCode
-            let val = js_sys::Reflect::get(&win, &wasm_bindgen::JsValue::from_str("downloadQrCode")).unwrap();
+            let val =
+                js_sys::Reflect::get(&win, &wasm_bindgen::JsValue::from_str("downloadQrCode"))
+                    .unwrap();
             if !val.is_undefined() {
                 let func: js_sys::Function = val.unchecked_into();
                 let svg_id = wasm_bindgen::JsValue::from_str("qr-svg-preview");
@@ -90,7 +94,7 @@ pub fn QrGenerator() -> impl IntoView {
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 // Left Panel: Configuration (Spans 2 columns)
                 <div class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs p-6 space-y-6">
-                    
+
                     // 1. Text/URL Input (Required)
                     <div class="space-y-2">
                         <label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">"URL / Text (Required)"</label>
@@ -462,7 +466,7 @@ pub fn QrGenerator() -> impl IntoView {
                                                 Some(view! {
                                                     <div class="flex items-center space-x-2 pt-1 animate-fade-in">
                                                         <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">"✓ Image loaded successfully"</span>
-                                                        <button 
+                                                        <button
                                                             on:click=move |_| set_logo_upload.set(String::new())
                                                             class="text-[10px] text-red-500 hover:underline font-bold"
                                                         >
@@ -487,7 +491,7 @@ pub fn QrGenerator() -> impl IntoView {
                     <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs p-6 space-y-6 flex-1 flex flex-col justify-between">
                         <div class="space-y-4">
                             <label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">"QR Code Preview"</label>
-                            
+
                             // SVG Preview container
                             <div class="p-4 rounded-xl border border-slate-100 dark:border-slate-800/80 bg-slate-50 dark:bg-slate-950/50 flex items-center justify-center flex-1 min-h-[300px]">
                                 {move || match qr_code_result.get() {
@@ -574,22 +578,22 @@ pub fn QrGenerator() -> impl IntoView {
                                             let frame_el = match frame_shape.as_str() {
                                                 "rounded" => {
                                                     view! {
-                                                        <rect x=mx + module_size * 0.5 y=my + module_size * 0.5 
-                                                              width=module_size * 6.0 height=module_size * 6.0 
+                                                        <rect x=mx + module_size * 0.5 y=my + module_size * 0.5
+                                                              width=module_size * 6.0 height=module_size * 6.0
                                                               rx=module_size * 1.5 ry=module_size * 1.5
                                                               stroke=eye_fill.clone() stroke-width=module_size fill="none" />
                                                     }.into_any()
                                                 }
                                                 "circle" => {
                                                     view! {
-                                                        <circle cx=mx + module_size * 3.5 cy=my + module_size * 3.5 
+                                                        <circle cx=mx + module_size * 3.5 cy=my + module_size * 3.5
                                                                 r=module_size * 3.0 stroke=eye_fill.clone() stroke-width=module_size fill="none" />
                                                     }.into_any()
                                                 }
                                                 _ => { // "square"
                                                     view! {
-                                                        <rect x=mx + module_size * 0.5 y=my + module_size * 0.5 
-                                                              width=module_size * 6.0 height=module_size * 6.0 
+                                                        <rect x=mx + module_size * 0.5 y=my + module_size * 0.5
+                                                              width=module_size * 6.0 height=module_size * 6.0
                                                               stroke=eye_fill.clone() stroke-width=module_size fill="none" />
                                                     }.into_any()
                                                 }
@@ -600,20 +604,20 @@ pub fn QrGenerator() -> impl IntoView {
                                             let ball_el = match ball_shape.as_str() {
                                                 "rounded" => {
                                                     view! {
-                                                        <rect x=mx + module_size * 2.0 y=my + module_size * 2.0 
-                                                              width=module_size * 3.0 height=module_size * 3.0 
+                                                        <rect x=mx + module_size * 2.0 y=my + module_size * 2.0
+                                                              width=module_size * 3.0 height=module_size * 3.0
                                                               rx=module_size * 0.8 ry=module_size * 0.8 fill=eye_fill.clone() />
                                                     }.into_any()
                                                 }
                                                 "circle" => {
                                                     view! {
-                                                        <circle cx=mx + module_size * 3.5 cy=my + module_size * 3.5 
+                                                        <circle cx=mx + module_size * 3.5 cy=my + module_size * 3.5
                                                                 r=module_size * 1.5 fill=eye_fill.clone() />
                                                     }.into_any()
                                                 }
                                                 _ => { // "square"
                                                     view! {
-                                                        <rect x=mx + module_size * 2.0 y=my + module_size * 2.0 
+                                                        <rect x=mx + module_size * 2.0 y=my + module_size * 2.0
                                                               width=module_size * 3.0 height=module_size * 3.0 fill=eye_fill.clone() />
                                                     }.into_any()
                                                 }
@@ -650,7 +654,7 @@ pub fn QrGenerator() -> impl IntoView {
                                             };
 
                                             Some(view! {
-                                                <rect x=250.0 - cutout_size / 2.0 y=250.0 - cutout_size / 2.0 
+                                                <rect x=250.0 - cutout_size / 2.0 y=250.0 - cutout_size / 2.0
                                                       width=cutout_size height=cutout_size rx=16 ry=16 fill=bg_color.get() />
                                                 {logo_el}
                                             })

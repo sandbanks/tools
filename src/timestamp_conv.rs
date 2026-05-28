@@ -1,7 +1,7 @@
 use leptos::prelude::*;
+use std::time::Duration;
 use wasm_bindgen_futures::spawn_local;
 use web_sys::window;
-use std::time::Duration;
 
 // Helper to get formatted date components from a js_sys::Date
 fn format_date_to_utc(date: &js_sys::Date) -> String {
@@ -20,14 +20,14 @@ fn format_date_to_local(date: &js_sys::Date) -> String {
 fn format_relative_time(sec: i64) -> String {
     let now_sec = (js_sys::Date::now() / 1000.0) as i64;
     let diff = now_sec - sec;
-    
+
     if diff == 0 {
         return "now".to_string();
     }
-    
+
     let is_past = diff > 0;
     let abs_diff = diff.abs() as u64;
-    
+
     let time_unit = if abs_diff < 60 {
         format!("{} seconds", abs_diff)
     } else if abs_diff < 3600 {
@@ -37,7 +37,7 @@ fn format_relative_time(sec: i64) -> String {
     } else {
         format!("{} days", abs_diff / 86400)
     };
-    
+
     if is_past {
         format!("{} ago", time_unit)
     } else {
@@ -48,9 +48,12 @@ fn format_relative_time(sec: i64) -> String {
 // Recursive function to tick the current clock every second
 fn tick_clock(set_time: WriteSignal<u64>) {
     set_time.set((js_sys::Date::now() / 1000.0) as u64);
-    set_timeout(move || {
-        tick_clock(set_time);
-    }, Duration::from_secs(1));
+    set_timeout(
+        move || {
+            tick_clock(set_time);
+        },
+        Duration::from_secs(1),
+    );
 }
 
 #[component]
@@ -71,7 +74,10 @@ pub fn TimestampConv() -> impl IntoView {
             spawn_local(async move {
                 if wasm_bindgen_futures::JsFuture::from(promise).await.is_ok() {
                     set_copied_live.set(true);
-                    set_timeout(move || set_copied_live.set(false), Duration::from_millis(1500));
+                    set_timeout(
+                        move || set_copied_live.set(false),
+                        Duration::from_millis(1500),
+                    );
                 }
             });
         }
@@ -79,7 +85,7 @@ pub fn TimestampConv() -> impl IntoView {
 
     // --- State for Timestamp -> Date Converter ---
     let (ts_input, set_ts_input) = signal(String::new());
-    
+
     // Auto-prepopulate input with live epoch initially
     Effect::new(move |_| {
         if ts_input.get().is_empty() {
@@ -105,8 +111,10 @@ pub fn TimestampConv() -> impl IntoView {
                     (num, 0)
                 };
 
-                let date = js_sys::Date::new(&wasm_bindgen::JsValue::from_f64((num * if num > 10_000_000_000 { 1 } else { 1000 }) as f64));
-                
+                let date = js_sys::Date::new(&wasm_bindgen::JsValue::from_f64(
+                    (num * if num > 10_000_000_000 { 1 } else { 1000 }) as f64,
+                ));
+
                 // If it is NaN
                 if date.get_time().is_nan() {
                     return Err("Invalid Unix timestamp value".to_string());
@@ -114,7 +122,7 @@ pub fn TimestampConv() -> impl IntoView {
 
                 Ok((sec, ms, date))
             }
-            Err(_) => Err("Invalid number. Please enter a valid integer timestamp.".to_string())
+            Err(_) => Err("Invalid number. Please enter a valid integer timestamp.".to_string()),
         }
     });
 
@@ -143,7 +151,7 @@ pub fn TimestampConv() -> impl IntoView {
 
         let ms = parsed_ms as i64;
         let sec = ms / 1000;
-        
+
         let date = js_sys::Date::new(&wasm_bindgen::JsValue::from_f64(parsed_ms));
         Ok((sec, ms, date))
     });
@@ -190,7 +198,7 @@ pub fn TimestampConv() -> impl IntoView {
                 // Left Card: Timestamp -> Date
                 <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs p-6 space-y-5">
                     <h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">"Timestamp to Date"</h3>
-                    
+
                     <div class="flex flex-col space-y-2">
                         <label class="text-xs font-semibold text-slate-700 dark:text-slate-300">"Unix Epoch Timestamp (sec or ms)"</label>
                         <input
@@ -235,7 +243,7 @@ pub fn TimestampConv() -> impl IntoView {
                 // Right Card: Date -> Timestamp
                 <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs p-6 space-y-5">
                     <h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">"Date to Timestamp"</h3>
-                    
+
                     <div class="flex flex-col space-y-2">
                         <label class="text-xs font-semibold text-slate-700 dark:text-slate-300">"Readable Date String (ISO, UTC, or Local)"</label>
                         <input

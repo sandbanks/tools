@@ -1,7 +1,7 @@
 use leptos::prelude::*;
+use std::time::Duration;
 use wasm_bindgen_futures::spawn_local;
 use web_sys::window;
-use std::time::Duration;
 
 struct GoField {
     name: String,
@@ -62,7 +62,7 @@ fn generate_go_type(
         serde_json::Value::Object(obj) => {
             let struct_name = to_pascal_case(field_name);
             let mut fields = Vec::new();
-            
+
             // Sort keys to make the output deterministic
             let mut keys: Vec<&String> = obj.keys().collect();
             keys.sort();
@@ -75,7 +75,7 @@ fn generate_go_type(
                 } else {
                     format!("{}{}", struct_name, to_pascal_case(key))
                 };
-                
+
                 let go_type = generate_go_type(val, &sub_field_name, structs);
                 fields.push(GoField {
                     name: go_field_name,
@@ -154,18 +154,14 @@ pub fn JsonToGo() -> impl IntoView {
         Ok(output)
     });
 
-    let output_text = Memo::new(move |_| {
-        match conversion_result.get() {
-            Ok(val) => val,
-            Err(_) => String::new(),
-        }
+    let output_text = Memo::new(move |_| match conversion_result.get() {
+        Ok(val) => val,
+        Err(_) => String::new(),
     });
 
-    let error_msg = Memo::new(move |_| {
-        match conversion_result.get() {
-            Err(e) => Some(e),
-            Ok(_) => None,
-        }
+    let error_msg = Memo::new(move |_| match conversion_result.get() {
+        Err(e) => Some(e),
+        Ok(_) => None,
     });
 
     let handle_copy = move |_| {
@@ -178,14 +174,17 @@ pub fn JsonToGo() -> impl IntoView {
             let nav = win.navigator();
             let clipboard = nav.clipboard();
             let promise = clipboard.write_text(&text);
-            
+
             spawn_local(async move {
                 let result = wasm_bindgen_futures::JsFuture::from(promise).await;
                 if result.is_ok() {
                     set_copied.set(true);
-                    set_timeout(move || {
-                        set_copied.set(false);
-                    }, Duration::from_millis(1500));
+                    set_timeout(
+                        move || {
+                            set_copied.set(false);
+                        },
+                        Duration::from_millis(1500),
+                    );
                 }
             });
         }

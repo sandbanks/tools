@@ -14,7 +14,7 @@ fn parse_render_result(val: JsValue) -> Result<String, String> {
         .ok()
         .and_then(|v| v.as_bool())
         .unwrap_or(false);
-        
+
     if success {
         let svg = js_sys::Reflect::get(&val, &JsValue::from_str("svg"))
             .ok()
@@ -33,14 +33,17 @@ fn parse_render_result(val: JsValue) -> Result<String, String> {
 // Templates helper
 fn get_template(name: &str) -> &'static str {
     match name {
-        "Flowchart" => "\
+        "Flowchart" => {
+            "\
 graph TD
     A[Start] --> B{Is it working?}
     B -- Yes --> C[Great!]
     B -- No --> D[Debug it]
     D --> B
-",
-        "Sequence" => "\
+"
+        }
+        "Sequence" => {
+            "\
 sequenceDiagram
     Alice->>Bob: Hello Bob, how are you?
     alt is sick
@@ -50,8 +53,10 @@ sequenceDiagram
     end
     Bob->>Alice: How about you?
     Alice-->>Bob: Good!
-",
-        "Class" => "\
+"
+        }
+        "Class" => {
+            "\
 classDiagram
     Animal <|-- Duck
     Animal <|-- Fish
@@ -69,8 +74,10 @@ classDiagram
         -int sizeInFeet
         -canEat()
     }
-",
-        "State" => "\
+"
+        }
+        "State" => {
+            "\
 stateDiagram-v2
     [*] --> Still
     Still --> [*]
@@ -78,8 +85,10 @@ stateDiagram-v2
     Moving --> Still
     Moving --> Crash
     Crash --> [*]
-",
-        "Gantt" => "\
+"
+        }
+        "Gantt" => {
+            "\
 gantt
     title A Gantt Chart
     dateFormat YYYY-MM-DD
@@ -89,8 +98,9 @@ gantt
     section Another
     Task in Another  :2026-05-28, 12d
     another task     :24d
-",
-        _ => "graph TD\n    A --> B"
+"
+        }
+        _ => "graph TD\n    A --> B",
     }
 }
 
@@ -102,19 +112,19 @@ pub fn MermaidEditor() -> impl IntoView {
     let default_code = get_template("Flowchart").to_string();
     let (code, set_code) = signal(default_code);
     let (is_live, set_is_live) = signal(true);
-    
+
     // Rendering states
     let (rendered_svg, set_rendered_svg) = signal(String::new());
     let (error_msg, set_error_msg) = signal(None::<String>);
     let (rendering, set_rendering) = signal(false);
-    
+
     // Trigger render manually or reactively
     let (trigger_counter, set_trigger_counter) = signal(0);
 
     let handle_render = move || {
         let code_val = code.get();
         let dark = is_dark_theme.get();
-        
+
         if code_val.trim().is_empty() {
             set_rendered_svg.set(String::new());
             set_error_msg.set(None);
@@ -153,7 +163,7 @@ pub fn MermaidEditor() -> impl IntoView {
         let _ = code.get();
         let _ = is_dark_theme.get();
         let _ = trigger_counter.get();
-        
+
         if is_live.get() {
             handle_render();
         }
@@ -177,10 +187,13 @@ pub fn MermaidEditor() -> impl IntoView {
         if svg_content.is_empty() {
             return;
         }
-        
+
         if let Some(win) = window() {
             if let Some(doc) = win.document() {
-                if let Ok(Some(el)) = doc.create_element("a").map(|v| v.dyn_into::<web_sys::HtmlElement>().ok()) {
+                if let Ok(Some(el)) = doc
+                    .create_element("a")
+                    .map(|v| v.dyn_into::<web_sys::HtmlElement>().ok())
+                {
                     let encoded = js_sys::encode_uri_component(&svg_content);
                     let href = format!("data:image/svg+xml;utf8,{}", encoded);
                     let _ = el.set_attribute("href", &href);
@@ -213,7 +226,7 @@ pub fn MermaidEditor() -> impl IntoView {
                 <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs p-6 flex flex-col space-y-4">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">"Mermaid Syntax"</span>
-                        
+
                         // Select Template dropdown
                         <select
                             on:change=handle_template_change
@@ -247,7 +260,7 @@ pub fn MermaidEditor() -> impl IntoView {
                                 />
                                 <span class="text-xs font-medium text-slate-700 dark:text-slate-300">"Live render"</span>
                             </label>
-                            
+
                             // Manual render button
                             {move || (!is_live.get()).then(|| view! {
                                 <button
@@ -274,7 +287,7 @@ pub fn MermaidEditor() -> impl IntoView {
                 <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs p-6 flex flex-col min-h-[30rem]">
                     <div class="flex items-center justify-between mb-4">
                         <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">"Rendered Diagram"</span>
-                        
+
                         <div class="flex items-center space-x-2">
                             {move || rendering.get().then(|| view! {
                                 <span class="inline-flex items-center space-x-2 text-xs text-indigo-500 dark:text-indigo-400 font-semibold">
@@ -285,7 +298,7 @@ pub fn MermaidEditor() -> impl IntoView {
                                     <span>"Rendering..."</span>
                                 </span>
                             })}
-                            
+
                             <button
                                 on:click=handle_export
                                 disabled=move || rendered_svg.get().is_empty()
@@ -335,7 +348,7 @@ pub fn MermaidEditor() -> impl IntoView {
                                 } else {
                                     // Inject SVG raw markup
                                     view! {
-                                        <div 
+                                        <div
                                             class="w-full h-full flex justify-center items-center select-all"
                                             inner_html=svg
                                         />

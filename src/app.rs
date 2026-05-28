@@ -1,22 +1,22 @@
 use leptos::prelude::*;
-use leptos_router::components::{Router, Routes, Route, A};
+use leptos_router::components::{Route, Router, Routes, A};
 use leptos_router::path;
 use web_sys::window;
 
 use crate::base64::Base64Tool;
-use crate::json_fmt::JsonTool;
+use crate::csv_json::CsvJsonConverter;
 use crate::dashboard::Dashboard;
-use crate::url_codec::UrlCodec;
-use crate::uuid_gen::UuidGen;
-use crate::jwt_decoder::JwtDecoder;
-use crate::mermaid_editor::MermaidEditor;
-use crate::timestamp_conv::TimestampConv;
+use crate::json_fmt::JsonTool;
 use crate::json_to_go::JsonToGo;
 use crate::json_to_rust::JsonToRust;
+use crate::jwt_decoder::JwtDecoder;
+use crate::mermaid_editor::MermaidEditor;
 use crate::qr_generator::QrGenerator;
 use crate::sql_fmt::SqlFormatter;
+use crate::timestamp_conv::TimestampConv;
+use crate::url_codec::UrlCodec;
+use crate::uuid_gen::UuidGen;
 use crate::yaml_json::YamlJsonConverter;
-use crate::csv_json::CsvJsonConverter;
 
 // Helper to set the HTML dark/light class
 fn set_theme_class(dark: bool) {
@@ -73,7 +73,7 @@ pub fn App() -> impl IntoView {
     view! {
         <Router>
             <div class="flex flex-col md:flex-row min-h-dvh bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
-                
+
                 // Mobile Top Bar
                 <header class="md:hidden flex items-center justify-between px-6 py-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 z-30">
                     <div class="flex items-center space-x-4">
@@ -83,7 +83,7 @@ pub fn App() -> impl IntoView {
                             </svg>
                             <span class="font-bold text-lg tracking-tight bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent">"DevTools"</span>
                         </A>
-                        
+
                         <button
                             on:click=move |_| set_is_dark.update(|dark| *dark = !*dark)
                             class="p-1.5 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
@@ -103,8 +103,8 @@ pub fn App() -> impl IntoView {
                             }}
                         </button>
                     </div>
-                    
-                    <button 
+
+                    <button
                         on:click=move |_| set_mobile_menu_open.update(|open| *open = !*open)
                         class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none"
                     >
@@ -122,7 +122,7 @@ pub fn App() -> impl IntoView {
                 // Mobile Sidebar Drawer Backdrop
                 {move || if mobile_menu_open.get() {
                     Some(view! {
-                        <div 
+                        <div
                             on:click=move |_| set_mobile_menu_open.set(false)
                             class="md:hidden fixed inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-xs z-35 transition-opacity"
                         />
@@ -148,7 +148,7 @@ pub fn App() -> impl IntoView {
                             </svg>
                             <span class="font-bold text-xl tracking-tight bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent">"DevTools"</span>
                         </A>
-                        
+
                         <button
                             on:click=move |_| set_is_dark.update(|dark| *dark = !*dark)
                             class="p-1.5 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
@@ -173,8 +173,8 @@ pub fn App() -> impl IntoView {
                     <div class="flex-1 overflow-y-auto custom-scrollbar pr-1 -mr-2 my-2">
                         <nav class="space-y-4">
                             <div>
-                                <A 
-                                    href="" 
+                                <A
+                                    href=""
                                     on:click=move |_| set_mobile_menu_open.set(false)
                                     attr:class="nav-link flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
                                 >
@@ -192,8 +192,8 @@ pub fn App() -> impl IntoView {
                                     <span class="w-1 h-1 rounded-full bg-indigo-500/60"></span>
                                 </div>
                                 <div class="space-y-0.5">
-                                    <A 
-                                        href="base64" 
+                                    <A
+                                        href="base64"
                                         on:click=move |_| set_mobile_menu_open.set(false)
                                         attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
                                     >
@@ -202,8 +202,8 @@ pub fn App() -> impl IntoView {
                                         </svg>
                                         <span class="font-medium text-xs">"Base64 Codec"</span>
                                     </A>
-                                    <A 
-                                        href="url" 
+                                    <A
+                                        href="url"
                                         on:click=move |_| set_mobile_menu_open.set(false)
                                         attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
                                     >
@@ -212,8 +212,8 @@ pub fn App() -> impl IntoView {
                                         </svg>
                                         <span class="font-medium text-xs">"URL Codec"</span>
                                     </A>
-                                    <A 
-                                        href="jwt" 
+                                    <A
+                                        href="jwt"
                                         on:click=move |_| set_mobile_menu_open.set(false)
                                         attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
                                     >
@@ -232,8 +232,8 @@ pub fn App() -> impl IntoView {
                                     <span class="w-1 h-1 rounded-full bg-violet-500/60"></span>
                                 </div>
                                 <div class="space-y-0.5">
-                                    <A 
-                                        href="json" 
+                                    <A
+                                        href="json"
                                         on:click=move |_| set_mobile_menu_open.set(false)
                                         attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
                                     >
@@ -242,8 +242,8 @@ pub fn App() -> impl IntoView {
                                         </svg>
                                         <span class="font-medium text-xs">"JSON Formatter"</span>
                                     </A>
-                                    <A 
-                                        href="sql-format" 
+                                    <A
+                                        href="sql-format"
                                         on:click=move |_| set_mobile_menu_open.set(false)
                                         attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
                                     >
@@ -262,8 +262,8 @@ pub fn App() -> impl IntoView {
                                     <span class="w-1 h-1 rounded-full bg-blue-500/60"></span>
                                 </div>
                                 <div class="space-y-0.5">
-                                    <A 
-                                        href="json-to-go" 
+                                    <A
+                                        href="json-to-go"
                                         on:click=move |_| set_mobile_menu_open.set(false)
                                         attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
                                     >
@@ -272,8 +272,8 @@ pub fn App() -> impl IntoView {
                                         </svg>
                                         <span class="font-medium text-xs">"JSON to Go"</span>
                                     </A>
-                                    <A 
-                                        href="json-to-rust" 
+                                    <A
+                                        href="json-to-rust"
                                         on:click=move |_| set_mobile_menu_open.set(false)
                                         attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
                                     >
@@ -282,18 +282,8 @@ pub fn App() -> impl IntoView {
                                         </svg>
                                         <span class="font-medium text-xs">"JSON to Rust"</span>
                                     </A>
-                                    <A 
-                                        href="timestamp" 
-                                        on:click=move |_| set_mobile_menu_open.set(false)
-                                        attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
-                                    >
-                                        <svg class="w-4 h-4 opacity-75" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        <span class="font-medium text-xs">"Timestamp Converter"</span>
-                                    </A>
-                                    <A 
-                                        href="yaml-json" 
+                                    <A
+                                        href="yaml-json"
                                         on:click=move |_| set_mobile_menu_open.set(false)
                                         attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
                                     >
@@ -302,8 +292,8 @@ pub fn App() -> impl IntoView {
                                         </svg>
                                         <span class="font-medium text-xs">"YAML ↔ JSON"</span>
                                     </A>
-                                    <A 
-                                        href="csv-json" 
+                                    <A
+                                        href="csv-json"
                                         on:click=move |_| set_mobile_menu_open.set(false)
                                         attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
                                     >
@@ -311,6 +301,16 @@ pub fn App() -> impl IntoView {
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
                                         </svg>
                                         <span class="font-medium text-xs">"CSV ↔ JSON"</span>
+                                    </A>
+                                    <A
+                                        href="timestamp"
+                                        on:click=move |_| set_mobile_menu_open.set(false)
+                                        attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
+                                    >
+                                        <svg class="w-4 h-4 opacity-75" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span class="font-medium text-xs">"Timestamp Converter"</span>
                                     </A>
                                 </div>
                             </div>
@@ -322,8 +322,8 @@ pub fn App() -> impl IntoView {
                                     <span class="w-1 h-1 rounded-full bg-emerald-500/60"></span>
                                 </div>
                                 <div class="space-y-0.5">
-                                    <A 
-                                        href="uuid" 
+                                    <A
+                                        href="uuid"
                                         on:click=move |_| set_mobile_menu_open.set(false)
                                         attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
                                     >
@@ -332,8 +332,8 @@ pub fn App() -> impl IntoView {
                                         </svg>
                                         <span class="font-medium text-xs">"UUID Generator"</span>
                                     </A>
-                                    <A 
-                                        href="mermaid" 
+                                    <A
+                                        href="mermaid"
                                         on:click=move |_| set_mobile_menu_open.set(false)
                                         attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
                                     >
@@ -343,8 +343,8 @@ pub fn App() -> impl IntoView {
                                         <span class="font-medium text-xs">"Mermaid Diagrams"</span>
                                     </A>
 
-                                    <A 
-                                        href="qr-generator" 
+                                    <A
+                                        href="qr-generator"
                                         on:click=move |_| set_mobile_menu_open.set(false)
                                         attr:class="nav-link flex items-center space-x-3 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
                                     >

@@ -1,7 +1,7 @@
 use leptos::prelude::*;
+use std::time::Duration;
 use wasm_bindgen_futures::spawn_local;
 use web_sys::window;
-use std::time::Duration;
 
 #[component]
 pub fn YamlJsonConverter() -> impl IntoView {
@@ -38,18 +38,14 @@ pub fn YamlJsonConverter() -> impl IntoView {
         }
     });
 
-    let output_text = Memo::new(move |_| {
-        match conversion_result.get() {
-            Ok(val) => val,
-            Err(_) => String::new(),
-        }
+    let output_text = Memo::new(move |_| match conversion_result.get() {
+        Ok(val) => val,
+        Err(_) => String::new(),
     });
 
-    let error_msg = Memo::new(move |_| {
-        match conversion_result.get() {
-            Err(e) => Some(e),
-            Ok(_) => None,
-        }
+    let error_msg = Memo::new(move |_| match conversion_result.get() {
+        Err(e) => Some(e),
+        Ok(_) => None,
     });
 
     let handle_copy = move |_| {
@@ -62,14 +58,17 @@ pub fn YamlJsonConverter() -> impl IntoView {
             let nav = win.navigator();
             let clipboard = nav.clipboard();
             let promise = clipboard.write_text(&text);
-            
+
             spawn_local(async move {
                 let result = wasm_bindgen_futures::JsFuture::from(promise).await;
                 if result.is_ok() {
                     set_copied.set(true);
-                    set_timeout(move || {
-                        set_copied.set(false);
-                    }, Duration::from_millis(1500));
+                    set_timeout(
+                        move || {
+                            set_copied.set(false);
+                        },
+                        Duration::from_millis(1500),
+                    );
                 }
             });
         }

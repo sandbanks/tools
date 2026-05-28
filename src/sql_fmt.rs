@@ -1,8 +1,8 @@
 use leptos::prelude::*;
+use sqlformat::{format, FormatOptions, Indent, QueryParams};
+use std::time::Duration;
 use wasm_bindgen_futures::spawn_local;
 use web_sys::window;
-use std::time::Duration;
-use sqlformat::{format, FormatOptions, QueryParams, Indent};
 
 #[component]
 pub fn SqlFormatter() -> impl IntoView {
@@ -34,9 +34,7 @@ pub fn SqlFormatter() -> impl IntoView {
         format(&sql, &QueryParams::None, options)
     });
 
-    let output_text = Memo::new(move |_| {
-        conversion_result.get()
-    });
+    let output_text = Memo::new(move |_| conversion_result.get());
 
     let handle_copy = move |_| {
         let text = output_text.get();
@@ -48,14 +46,17 @@ pub fn SqlFormatter() -> impl IntoView {
             let nav = win.navigator();
             let clipboard = nav.clipboard();
             let promise = clipboard.write_text(&text);
-            
+
             spawn_local(async move {
                 let result = wasm_bindgen_futures::JsFuture::from(promise).await;
                 if result.is_ok() {
                     set_copied.set(true);
-                    set_timeout(move || {
-                        set_copied.set(false);
-                    }, Duration::from_millis(1500));
+                    set_timeout(
+                        move || {
+                            set_copied.set(false);
+                        },
+                        Duration::from_millis(1500),
+                    );
                 }
             });
         }

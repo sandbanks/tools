@@ -16,7 +16,8 @@ pub fn Dashboard() -> impl IntoView {
     let (search_query, set_search_query) = signal(String::new());
 
     // Master list of tools
-    let get_tools = move || vec![
+    let get_tools = move || {
+        vec![
         Tool {
             name: "Base64 Codec",
             desc: "Encode and decode plain text or URL-safe Base64 strings instantly.",
@@ -63,14 +64,6 @@ pub fn Dashboard() -> impl IntoView {
             path: "mermaid",
             category: "Generators",
             icon_d: "M7 12l3-3 3 3M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z",
-            is_active: true,
-        },
-        Tool {
-            name: "Timestamp Converter",
-            desc: "Convert Unix epoch timestamps to UTC, Local, and ISO dates and vice versa.",
-            path: "timestamp",
-            category: "Converters",
-            icon_d: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z",
             is_active: true,
         },
         Tool {
@@ -121,7 +114,16 @@ pub fn Dashboard() -> impl IntoView {
             icon_d: "M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25A2.25 2.25 0 0113.5 8.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z",
             is_active: true,
         },
-    ];
+        Tool {
+            name: "Timestamp Converter",
+            desc: "Convert Unix epoch timestamps to UTC, Local, and ISO dates and vice versa.",
+            path: "timestamp",
+            category: "Converters",
+            icon_d: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z",
+            is_active: true,
+        },
+        ]
+    };
 
     // Filter tools based on query
     let filtered_tools = Memo::new(move |_| {
@@ -129,17 +131,30 @@ pub fn Dashboard() -> impl IntoView {
         get_tools()
             .into_iter()
             .filter(|t| {
-                t.name.to_lowercase().contains(&query) || 
-                t.desc.to_lowercase().contains(&query) ||
-                t.category.to_lowercase().contains(&query)
+                t.name.to_lowercase().contains(&query)
+                    || t.desc.to_lowercase().contains(&query)
+                    || t.category.to_lowercase().contains(&query)
             })
             .collect::<Vec<Tool>>()
     });
 
     // Extract unique categories that have matching tools
     let active_categories = Memo::new(move |_| {
+        let preferred_order = vec![
+            "Encoders & Decoders",
+            "Formatters & Beautifiers",
+            "Converters",
+            "Generators",
+        ];
         let mut cats = Vec::new();
-        for tool in filtered_tools.get() {
+        let tools = filtered_tools.get();
+        for cat in preferred_order {
+            if tools.iter().any(|t| t.category == cat) {
+                cats.push(cat);
+            }
+        }
+        // Catch-all for any other categories
+        for tool in &tools {
             if !cats.contains(&tool.category) {
                 cats.push(tool.category);
             }
@@ -187,7 +202,7 @@ pub fn Dashboard() -> impl IntoView {
             {move || {
                 let categories = active_categories.get();
                 let tools_list = filtered_tools.get();
-                
+
                 if categories.is_empty() {
                     view! {
                         <div class="flex flex-col items-center justify-center py-16 text-center space-y-3">
@@ -201,7 +216,7 @@ pub fn Dashboard() -> impl IntoView {
                 } else {
                     categories.into_iter().map(move |category| {
                         let category_tools: Vec<&Tool> = tools_list.iter().filter(|t| t.category == category).collect();
-                        
+
                         let (cat_icon, cat_badge_class) = match category {
                             "Encoders & Decoders" => (
                                 view! {
@@ -254,12 +269,12 @@ pub fn Dashboard() -> impl IntoView {
                                         )}
                                     </span>
                                 </div>
-                                
+
                                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                     {category_tools.into_iter().map(move |tool| {
                                         let is_active = tool.is_active;
                                         let path = tool.path;
-                                        
+
                                         let card_content = view! {
                                             <div class=move || {
                                                 format!(

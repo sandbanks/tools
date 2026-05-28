@@ -1,8 +1,8 @@
-use leptos::prelude::*;
 use base64::Engine;
+use leptos::prelude::*;
+use std::time::Duration;
 use wasm_bindgen_futures::spawn_local;
 use web_sys::window;
-use std::time::Duration;
 
 #[component]
 pub fn Base64Tool() -> impl IntoView {
@@ -32,13 +32,14 @@ pub fn Base64Tool() -> impl IntoView {
             let cleaned: String = text.chars().filter(|c| !c.is_whitespace()).collect();
 
             match engine.decode(cleaned) {
-                Ok(bytes) => {
-                    match String::from_utf8(bytes) {
-                        Ok(s) => Ok(s),
-                        Err(_) => Err("Invalid UTF-8: Decoded binary data is not a valid text string.".to_string())
-                    }
-                }
-                Err(e) => Err(format!("Invalid Base64 format: {}", e))
+                Ok(bytes) => match String::from_utf8(bytes) {
+                    Ok(s) => Ok(s),
+                    Err(_) => Err(
+                        "Invalid UTF-8: Decoded binary data is not a valid text string."
+                            .to_string(),
+                    ),
+                },
+                Err(e) => Err(format!("Invalid Base64 format: {}", e)),
             }
         } else {
             let engine = match (url_safe.get(), no_pad.get()) {
@@ -52,18 +53,14 @@ pub fn Base64Tool() -> impl IntoView {
     });
 
     // Derive output and error from conversion result
-    let output_text = Memo::new(move |_| {
-        match conversion_result.get() {
-            Ok(val) => val,
-            Err(_) => String::new(),
-        }
+    let output_text = Memo::new(move |_| match conversion_result.get() {
+        Ok(val) => val,
+        Err(_) => String::new(),
     });
 
-    let error_msg = Memo::new(move |_| {
-        match conversion_result.get() {
-            Err(e) => Some(e),
-            Ok(_) => None,
-        }
+    let error_msg = Memo::new(move |_| match conversion_result.get() {
+        Err(e) => Some(e),
+        Ok(_) => None,
     });
 
     // Clipboard copy handler
@@ -77,14 +74,17 @@ pub fn Base64Tool() -> impl IntoView {
             let nav = win.navigator();
             let clipboard = nav.clipboard();
             let promise = clipboard.write_text(&text);
-            
+
             spawn_local(async move {
                 let result = wasm_bindgen_futures::JsFuture::from(promise).await;
                 if result.is_ok() {
                     set_copied.set(true);
-                    set_timeout(move || {
-                        set_copied.set(false);
-                    }, Duration::from_millis(1500));
+                    set_timeout(
+                        move || {
+                            set_copied.set(false);
+                        },
+                        Duration::from_millis(1500),
+                    );
                 }
             });
         }

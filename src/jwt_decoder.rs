@@ -1,9 +1,9 @@
+use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine as _};
 use leptos::prelude::*;
-use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
 use serde_json::Value;
+use std::time::Duration;
 use wasm_bindgen_futures::spawn_local;
 use web_sys::window;
-use std::time::Duration;
 
 // Formats Unix epoch seconds into a human-readable UTC string
 fn format_epoch_seconds(sec: u64) -> String {
@@ -42,8 +42,7 @@ fn decode_jwt(token: &str) -> Result<DecodedJwt, String> {
         .map_err(|e| format!("Failed to read header as UTF-8: {}", e))?;
     let header_val: Value = serde_json::from_str(&header_str)
         .map_err(|e| format!("Failed to parse header as JSON: {}", e))?;
-    let header_json = serde_json::to_string_pretty(&header_val)
-        .unwrap_or(header_str);
+    let header_json = serde_json::to_string_pretty(&header_val).unwrap_or(header_str);
 
     // 2. Decode Payload
     let payload_bytes = URL_SAFE_NO_PAD
@@ -53,29 +52,38 @@ fn decode_jwt(token: &str) -> Result<DecodedJwt, String> {
         .map_err(|e| format!("Failed to read payload as UTF-8: {}", e))?;
     let payload_val: Value = serde_json::from_str(&payload_str)
         .map_err(|e| format!("Failed to parse payload as JSON: {}", e))?;
-    let payload_json = serde_json::to_string_pretty(&payload_val)
-        .unwrap_or(payload_str);
+    let payload_json = serde_json::to_string_pretty(&payload_val).unwrap_or(payload_str);
 
     // 3. Decode Signature
     let sig_bytes = URL_SAFE_NO_PAD
         .decode(parts[2])
         .map_err(|e| format!("Failed to base64-decode signature: {}", e))?;
-    let signature_hex = sig_bytes.iter().map(|b| format!("{:02x}", b)).collect::<String>();
+    let signature_hex = sig_bytes
+        .iter()
+        .map(|b| format!("{:02x}", b))
+        .collect::<String>();
     let signature_base64 = parts[2].to_string();
 
     // Extract claims from payload
     let exp = payload_val.get("exp").and_then(|v| v.as_u64());
     let iat = payload_val.get("iat").and_then(|v| v.as_u64());
     let nbf = payload_val.get("nbf").and_then(|v| v.as_u64());
-    let iss = payload_val.get("iss").and_then(|v| v.as_str().map(|s| s.to_string()));
-    let sub = payload_val.get("sub").and_then(|v| v.as_str().map(|s| s.to_string()));
-    
+    let iss = payload_val
+        .get("iss")
+        .and_then(|v| v.as_str().map(|s| s.to_string()));
+    let sub = payload_val
+        .get("sub")
+        .and_then(|v| v.as_str().map(|s| s.to_string()));
+
     // Audience can be string or array
     let aud = payload_val.get("aud").and_then(|v| {
         if let Some(s) = v.as_str() {
             Some(s.to_string())
         } else if let Some(arr) = v.as_array() {
-            let elements: Vec<String> = arr.iter().filter_map(|el| el.as_str().map(|s| s.to_string())).collect();
+            let elements: Vec<String> = arr
+                .iter()
+                .filter_map(|el| el.as_str().map(|s| s.to_string()))
+                .collect();
             Some(elements.join(", "))
         } else {
             None
@@ -154,7 +162,10 @@ pub fn JwtDecoder() -> impl IntoView {
                 spawn_local(async move {
                     if wasm_bindgen_futures::JsFuture::from(promise).await.is_ok() {
                         set_copied_header.set(true);
-                        set_timeout(move || set_copied_header.set(false), Duration::from_millis(1500));
+                        set_timeout(
+                            move || set_copied_header.set(false),
+                            Duration::from_millis(1500),
+                        );
                     }
                 });
             }
@@ -171,7 +182,10 @@ pub fn JwtDecoder() -> impl IntoView {
                 spawn_local(async move {
                     if wasm_bindgen_futures::JsFuture::from(promise).await.is_ok() {
                         set_copied_payload.set(true);
-                        set_timeout(move || set_copied_payload.set(false), Duration::from_millis(1500));
+                        set_timeout(
+                            move || set_copied_payload.set(false),
+                            Duration::from_millis(1500),
+                        );
                     }
                 });
             }
@@ -204,7 +218,7 @@ pub fn JwtDecoder() -> impl IntoView {
                         class="w-full p-4 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 font-mono text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none resize-y transition-all custom-scrollbar break-all"
                     />
                 </div>
-                
+
                 <div class="flex items-center justify-between">
                     <button
                         on:click=handle_clear
@@ -318,7 +332,7 @@ pub fn JwtDecoder() -> impl IntoView {
                                     <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs p-6 flex flex-col space-y-4">
                                         <div class="flex items-center justify-between">
                                             <span class="text-xs font-bold uppercase tracking-wider text-rose-500">"Header (Algorithm & Type)"</span>
-                                            
+
                                             <button
                                                 on:click=handle_copy_header
                                                 class=move || {
@@ -336,7 +350,7 @@ pub fn JwtDecoder() -> impl IntoView {
                                                 {move || if copied_header.get() { "Copied!" } else { "Copy" }}
                                             </button>
                                         </div>
-                                        
+
                                         <pre class="w-full p-4 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 font-mono text-sm text-rose-700 dark:text-rose-400 overflow-x-auto custom-scrollbar whitespace-pre-wrap break-all min-h-[16rem]">
                                             {jwt.header_json.clone()}
                                         </pre>
@@ -346,7 +360,7 @@ pub fn JwtDecoder() -> impl IntoView {
                                     <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs p-6 flex flex-col space-y-4">
                                         <div class="flex items-center justify-between">
                                             <span class="text-xs font-bold uppercase tracking-wider text-indigo-500">"Payload (Data & Claims)"</span>
-                                            
+
                                             <button
                                                 on:click=handle_copy_payload
                                                 class=move || {
@@ -364,7 +378,7 @@ pub fn JwtDecoder() -> impl IntoView {
                                                 {move || if copied_payload.get() { "Copied!" } else { "Copy" }}
                                             </button>
                                         </div>
-                                        
+
                                         <pre class="w-full p-4 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 font-mono text-sm text-indigo-700 dark:text-indigo-400 overflow-x-auto custom-scrollbar whitespace-pre-wrap break-all min-h-[16rem]">
                                             {jwt.payload_json.clone()}
                                         </pre>
@@ -387,7 +401,7 @@ pub fn JwtDecoder() -> impl IntoView {
                                         <div>
                                             <span class="font-bold text-slate-800 dark:text-slate-300">")"</span>
                                         </div>
-                                        
+
                                         <div class="border-t border-slate-200 dark:border-slate-800/80 pt-3 mt-3 space-y-1 text-[11px]">
                                             <div>
                                                 <span class="font-semibold text-slate-700 dark:text-slate-400">"Hex: "</span>

@@ -1,7 +1,7 @@
 use leptos::prelude::*;
+use std::time::Duration;
 use wasm_bindgen_futures::spawn_local;
 use web_sys::window;
-use std::time::Duration;
 
 #[component]
 pub fn UrlCodec() -> impl IntoView {
@@ -19,7 +19,10 @@ pub fn UrlCodec() -> impl IntoView {
         if is_decode.get() {
             match js_sys::decode_uri_component(&text) {
                 Ok(js_str) => Ok(String::from(js_str)),
-                Err(_) => Err("Malformed URL encoding: Invalid '%' escape sequence found in the input.".to_string())
+                Err(_) => Err(
+                    "Malformed URL encoding: Invalid '%' escape sequence found in the input."
+                        .to_string(),
+                ),
             }
         } else {
             let js_str = js_sys::encode_uri_component(&text);
@@ -28,18 +31,14 @@ pub fn UrlCodec() -> impl IntoView {
     });
 
     // Derive output and error
-    let output_text = Memo::new(move |_| {
-        match conversion_result.get() {
-            Ok(val) => val,
-            Err(_) => String::new(),
-        }
+    let output_text = Memo::new(move |_| match conversion_result.get() {
+        Ok(val) => val,
+        Err(_) => String::new(),
     });
 
-    let error_msg = Memo::new(move |_| {
-        match conversion_result.get() {
-            Err(e) => Some(e),
-            Ok(_) => None,
-        }
+    let error_msg = Memo::new(move |_| match conversion_result.get() {
+        Err(e) => Some(e),
+        Ok(_) => None,
     });
 
     // Clipboard copy
@@ -53,14 +52,17 @@ pub fn UrlCodec() -> impl IntoView {
             let nav = win.navigator();
             let clipboard = nav.clipboard();
             let promise = clipboard.write_text(&text);
-            
+
             spawn_local(async move {
                 let result = wasm_bindgen_futures::JsFuture::from(promise).await;
                 if result.is_ok() {
                     set_copied.set(true);
-                    set_timeout(move || {
-                        set_copied.set(false);
-                    }, Duration::from_millis(1500));
+                    set_timeout(
+                        move || {
+                            set_copied.set(false);
+                        },
+                        Duration::from_millis(1500),
+                    );
                 }
             });
         }

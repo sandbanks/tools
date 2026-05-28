@@ -1,15 +1,15 @@
 use leptos::prelude::*;
+use std::collections::HashSet;
+use std::time::Duration;
 use wasm_bindgen_futures::spawn_local;
 use web_sys::window;
-use std::time::Duration;
-use std::collections::HashSet;
 
 fn parse_csv_line(line: &str) -> Vec<String> {
     let mut fields = Vec::new();
     let mut field = String::new();
     let mut in_quotes = false;
     let mut chars = line.chars().peekable();
-    
+
     while let Some(c) = chars.next() {
         if c == '"' {
             in_quotes = !in_quotes;
@@ -69,7 +69,7 @@ pub fn CsvJsonConverter() -> impl IntoView {
             for line in lines {
                 let fields = parse_csv_line(line);
                 let mut map = serde_json::Map::new();
-                
+
                 for (i, header) in headers.iter().enumerate() {
                     let val_str = if i < fields.len() {
                         fields[i].clone()
@@ -94,8 +94,11 @@ pub fn CsvJsonConverter() -> impl IntoView {
                         }
                     } else {
                         // Strip surrounding quotes if the field parsing returned them
-                        let stripped = if val_str.starts_with('"') && val_str.ends_with('"') && val_str.len() >= 2 {
-                            val_str[1..val_str.len()-1].replace("\"\"", "\"")
+                        let stripped = if val_str.starts_with('"')
+                            && val_str.ends_with('"')
+                            && val_str.len() >= 2
+                        {
+                            val_str[1..val_str.len() - 1].replace("\"\"", "\"")
                         } else {
                             val_str
                         };
@@ -125,13 +128,18 @@ pub fn CsvJsonConverter() -> impl IntoView {
                         if let serde_json::Value::Object(obj) = item {
                             objs.push(obj);
                         } else {
-                            return Err("JSON Array must contain only objects to represent rows.".to_string());
+                            return Err("JSON Array must contain only objects to represent rows."
+                                .to_string());
                         }
                     }
                     objs
                 }
                 serde_json::Value::Object(obj) => vec![obj],
-                _ => return Err("JSON input must be an array of objects or a single object.".to_string()),
+                _ => {
+                    return Err(
+                        "JSON input must be an array of objects or a single object.".to_string()
+                    )
+                }
             };
 
             if objects.is_empty() {
@@ -150,9 +158,12 @@ pub fn CsvJsonConverter() -> impl IntoView {
             }
 
             let mut csv_output = String::new();
-            
+
             // Write Header
-            let escaped_headers: Vec<String> = headers.iter().map(|h| format!("\"{}\"", h.replace('"', "\"\""))).collect();
+            let escaped_headers: Vec<String> = headers
+                .iter()
+                .map(|h| format!("\"{}\"", h.replace('"', "\"\"")))
+                .collect();
             csv_output.push_str(&escaped_headers.join(","));
             csv_output.push_str("\n");
 
@@ -171,18 +182,14 @@ pub fn CsvJsonConverter() -> impl IntoView {
         }
     });
 
-    let output_text = Memo::new(move |_| {
-        match conversion_result.get() {
-            Ok(val) => val,
-            Err(_) => String::new(),
-        }
+    let output_text = Memo::new(move |_| match conversion_result.get() {
+        Ok(val) => val,
+        Err(_) => String::new(),
     });
 
-    let error_msg = Memo::new(move |_| {
-        match conversion_result.get() {
-            Err(e) => Some(e),
-            Ok(_) => None,
-        }
+    let error_msg = Memo::new(move |_| match conversion_result.get() {
+        Err(e) => Some(e),
+        Ok(_) => None,
     });
 
     let handle_copy = move |_| {
@@ -195,14 +202,17 @@ pub fn CsvJsonConverter() -> impl IntoView {
             let nav = win.navigator();
             let clipboard = nav.clipboard();
             let promise = clipboard.write_text(&text);
-            
+
             spawn_local(async move {
                 let result = wasm_bindgen_futures::JsFuture::from(promise).await;
                 if result.is_ok() {
                     set_copied.set(true);
-                    set_timeout(move || {
-                        set_copied.set(false);
-                    }, Duration::from_millis(1500));
+                    set_timeout(
+                        move || {
+                            set_copied.set(false);
+                        },
+                        Duration::from_millis(1500),
+                    );
                 }
             });
         }

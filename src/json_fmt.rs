@@ -2,9 +2,9 @@ use leptos::prelude::*;
 use serde::Serialize;
 use serde_json::ser::PrettyFormatter;
 use serde_json::Serializer;
+use std::time::Duration;
 use wasm_bindgen_futures::spawn_local;
 use web_sys::window;
-use std::time::Duration;
 
 #[component]
 pub fn JsonTool() -> impl IntoView {
@@ -31,8 +31,7 @@ pub fn JsonTool() -> impl IntoView {
         let mut serializer = Serializer::with_formatter(&mut buffer, formatter);
         val.serialize(&mut serializer)
             .map_err(|e| format!("Serialization error: {}", e))?;
-        String::from_utf8(buffer)
-            .map_err(|e| format!("UTF-8 encoding error: {}", e))
+        String::from_utf8(buffer).map_err(|e| format!("UTF-8 encoding error: {}", e))
     };
 
     // Prettify logic
@@ -132,14 +131,17 @@ pub fn JsonTool() -> impl IntoView {
             let nav = win.navigator();
             let clipboard = nav.clipboard();
             let promise = clipboard.write_text(&text);
-            
+
             spawn_local(async move {
                 let result = wasm_bindgen_futures::JsFuture::from(promise).await;
                 if result.is_ok() {
                     set_copied.set(true);
-                    set_timeout(move || {
-                        set_copied.set(false);
-                    }, Duration::from_millis(1500));
+                    set_timeout(
+                        move || {
+                            set_copied.set(false);
+                        },
+                        Duration::from_millis(1500),
+                    );
                 }
             });
         }
@@ -236,7 +238,7 @@ pub fn JsonTool() -> impl IntoView {
                         >
                             "Prettify"
                         </button>
-                        
+
                         <button
                             on:click=handle_minify_btn
                             class="px-4 py-2 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold rounded-lg text-sm transition duration-200"

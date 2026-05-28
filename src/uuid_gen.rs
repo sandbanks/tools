@@ -1,7 +1,7 @@
 use leptos::prelude::*;
+use std::time::Duration;
 use wasm_bindgen_futures::spawn_local;
 use web_sys::window;
-use std::time::Duration;
 
 // Generates a batch of UUIDs
 fn generate_batch(q: usize, version: u8, up: bool, flat: bool) -> String {
@@ -36,7 +36,12 @@ pub fn UuidGen() -> impl IntoView {
 
     // Action to regenerate
     let handle_generate = move |_| {
-        let val = generate_batch(quantity.get(), uuid_version.get(), uppercase.get(), no_hyphens.get());
+        let val = generate_batch(
+            quantity.get(),
+            uuid_version.get(),
+            uppercase.get(),
+            no_hyphens.get(),
+        );
         set_output.set(val);
     };
 
@@ -51,14 +56,17 @@ pub fn UuidGen() -> impl IntoView {
             let nav = win.navigator();
             let clipboard = nav.clipboard();
             let promise = clipboard.write_text(&text);
-            
+
             spawn_local(async move {
                 let result = wasm_bindgen_futures::JsFuture::from(promise).await;
                 if result.is_ok() {
                     set_copied.set(true);
-                    set_timeout(move || {
-                        set_copied.set(false);
-                    }, Duration::from_millis(1500));
+                    set_timeout(
+                        move || {
+                            set_copied.set(false);
+                        },
+                        Duration::from_millis(1500),
+                    );
                 }
             });
         }
@@ -166,7 +174,7 @@ pub fn UuidGen() -> impl IntoView {
                         >
                             "Generate"
                         </button>
-                        
+
                         <button
                             on:click=handle_clear
                             class="px-4 py-2 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold rounded-lg text-sm transition duration-200"
