@@ -255,7 +255,7 @@ pub fn JsonToGo() -> impl IntoView {
                     <div class="flex flex-col space-y-2">
                         <label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">"JSON Input"</label>
                         <textarea
-                            rows="12"
+                            rows="20"
                             placeholder="Paste JSON here..."
                             prop:value=input
                             on:input=move |ev| set_input.set(event_target_value(&ev))
@@ -266,7 +266,7 @@ pub fn JsonToGo() -> impl IntoView {
                     <div class="flex flex-col space-y-2">
                         <label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">"Go Struct Output"</label>
                         <textarea
-                            rows="12"
+                            rows="20"
                             readonly=true
                             placeholder="Go structs will appear here..."
                             prop:value=output_text
