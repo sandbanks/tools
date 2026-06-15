@@ -1,3 +1,6 @@
 /dist
 /target
 .tokensave
+.antigravitycli
+.wrangler
+skills-lock.json
