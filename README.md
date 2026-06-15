@@ -14,13 +14,26 @@ Most online developer utilities are bloated, tracking-heavy, or require sending 
 
 ## Features
 
-### 🛠️ Base64 Codec
-* Instantly encode or decode plain text and URL-safe Base64 strings.
-* Handles large strings entirely in Rust memory, bypassing JavaScript engine allocation bottlenecks.
+### 🔏 Encoders & Decoders
+* **Base64 Codec:** Instantly encode or decode plain text or URL-safe Base64 strings without JavaScript engine allocation bottlenecks.
+* **URL Codec:** Safely encode and decode URL parameters locally to prevent character conflicts.
+* **JWT Decoder:** Decode and inspect JSON Web Token (JWT) headers, payloads, and signatures. Paste production access tokens with complete confidence that your keys are never transmitted to a third party.
 
-###  JSON Formatter & Validator
-* Prettify (2-space/4-space indentation) or minify raw JSON structures.
-* Powered by client-side Rust serialization (`serde_json`) for instantaneous syntax validation and zero UI-blocking rendering lag on massive minified payloads.
+### 📄 Formatters & Beautifiers
+* **JSON Formatter:** Format, prettify, and minify complex JSON structures with customizable indentation styles. Powered by client-side `serde_json` for lag-free rendering.
+* **SQL Formatter:** Instantly pretty-print messy, raw SQL queries into clean, highly readable, structured layouts.
+
+### 🔄 Converters
+* **JSON to Go Struct:** Convert raw JSON objects into fully typed, nested Go struct definitions instantly.
+* **JSON to Rust Struct:** Convert JSON payloads into idiomatic, nested Rust struct definitions complete with `#[derive(Serialize, Deserialize)]` attributes.
+* **YAML ↔ JSON:** Seamlessly convert configuration files between YAML syntax and JSON format completely client-side.
+* **CSV ↔ JSON:** Transform tabular data between raw CSV sheets and structured JSON arrays.
+* **Timestamp Converter:** Convert Unix epoch timestamps to UTC, Local, and ISO dates (and vice versa) without worrying about system timezone leaks.
+
+### 🎲 Generators
+* **UUID Generator:** Generate cryptographically secure Universally Unique Identifiers (**UUIDv4** and **UUIDv7**) in bulk using native client-side entropy.
+* **Mermaid Diagrams:** Render flowcharts, sequence diagrams, and class diagrams instantly using simple Markdown-like text syntax directly in the browser runtime.
+* **QR Code Generator:** Generate customized QR codes with custom colors, gradients, logos, and eye patterns entirely offline without reliance on sketchy tracking APIs.
 
 ---
 
