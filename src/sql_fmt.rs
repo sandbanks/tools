@@ -25,13 +25,12 @@ pub fn SqlFormatter() -> impl IntoView {
 
         let uppercase = keyword_case.get() == "uppercase";
 
-        let options = FormatOptions {
-            indent,
-            uppercase,
-            lines_between_queries: 2,
-        };
+        let mut options = FormatOptions::default();
+        options.indent = indent;
+        options.uppercase = Some(uppercase);
+        options.lines_between_queries = 2;
 
-        format(&sql, &QueryParams::None, options)
+        format(&sql, &QueryParams::None, &options)
     });
 
     let output_text = Memo::new(move |_| conversion_result.get());
