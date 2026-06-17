@@ -189,7 +189,7 @@ pub fn Dashboard() -> impl IntoView {
                             class="p-1.5 rounded-md bg-white/20 backdrop-blur-md hover:bg-white/30 transition-colors"
                             title="Tangled Repository"
                         >
-                            <img class="w-4 h-4" src="https://assets.tangled.network/tangled_dolly_face_only_black_on_trans.svg" alt="Tangled" />
+                            <img class="w-4 h-4" src="https://assets.tangled.network/tangled_dolly_face_only_white_on_trans.svg" alt="Tangled" />
                         </a>
                     </div>
                     <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">
