@@ -4,6 +4,8 @@ A lightweight, local-first developer utility suite built entirely in Rust, compi
 
 **Live App:** [tools.sandbanks.tech](https://tools.sandbanks.tech/)
 
+<img src="./assets/qr-code.svg" width="100" alt="QR code linking to live app">
+
 ---
 
 ## Why this exists
