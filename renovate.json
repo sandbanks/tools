@@ -2,5 +2,21 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "description": "Hold back Leptos 0.8.x macro/router crates until server_fn_macro_default supports syn 3 (avoids syn 2 vs 3 mismatch with server_fn_macro >=0.8.12)",
+      "matchManagers": [
+        "cargo"
+      ],
+      "matchPackageNames": [
+        "leptos",
+        "leptos_router",
+        "leptos_macro",
+        "leptos_hot_reload",
+        "server_fn_macro"
+      ],
+      "enabled": false
+    }
   ]
 }
